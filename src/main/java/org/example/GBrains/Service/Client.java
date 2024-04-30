@@ -1,6 +1,6 @@
 package org.example.GBrains.Service;
 
-import org.example.GBrains.Models.ClientWindow;
+import org.example.GBrains.Models.ClientGUI;
 
 public class Client {
     Server server;
@@ -15,8 +15,8 @@ public class Client {
     }
 
 
-    public void getClientObjectForServer(ClientWindow clientWindow) {
-        server.getClientObject(clientWindow);
+    public void getClientObjectForServer(ClientGUI clientGUI) {
+        server.getClientObject(clientGUI);
     }
 
     public void getMsgFrClientForServer(String clientMsg) {

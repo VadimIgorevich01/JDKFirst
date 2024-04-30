@@ -1,7 +1,7 @@
 package org.example.GBrains.Service;
 
-import org.example.GBrains.Models.ClientWindow;
-import org.example.GBrains.Models.ServerWindow;
+import org.example.GBrains.Models.ClientGUI;
+import org.example.GBrains.Models.ServerGUI;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,24 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-    public Server(ServerWindow serverWindow) {
+    public Server(ServerGUI serverWindow) {
         this.serverWindow = serverWindow;
-        clientWindowList = new ArrayList<>();
+        clientGUIList = new ArrayList<>();
     }
 
-    List<ClientWindow> clientWindowList;
-    ServerWindow serverWindow;
+    List<ClientGUI> clientGUIList;
+    ServerGUI serverWindow;
     String strEntireLog = "";
     String strCommunicationLog = "";
     String strCommunicationLogReady;
 
     public void setFieldInfoForAllClients(String connectionStatusMsg) {
-        for (int i = 0; i < clientWindowList.size(); i++) {
-            clientWindowList.get(i).labelFieldInfo.setText(connectionStatusMsg);
+        for (int i = 0; i < clientGUIList.size(); i++) {
+            clientGUIList.get(i).labelFieldInfo.setText(connectionStatusMsg);
         }
     }
     public void connectUserToServer(String userName) {
         String newLine = userName + " connected";
+        System.out.println(newLine);
+        System.out.println(userName);
         strEntireLog += "<br>" + newLine;
         String textBegining = "<html>";
         String textEnding = "</html>";
@@ -35,10 +37,10 @@ public class Server {
         serverWindow.revalidate();
     }
 
-    public void getClientObject(ClientWindow client) {
-        clientWindowList.add(client);
-        for (int i = 0; i < clientWindowList.size(); i++) {
-            clientWindowList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
+    public void getClientObject(ClientGUI client) {
+        clientGUIList.add(client);
+        for (int i = 0; i < clientGUIList.size(); i++) {
+            clientGUIList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
         }
     }
 
@@ -49,8 +51,8 @@ public class Server {
 
         strCommunicationLog += "<br>" + newLine;
         strCommunicationLogReady = textBegining + strCommunicationLog + textEnding;
-        for (int i = 0; i < clientWindowList.size(); i++) {
-            clientWindowList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
+        for (int i = 0; i < clientGUIList.size(); i++) {
+            clientGUIList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
         }
 
         strEntireLog += "<br>" + newLine;

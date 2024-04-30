@@ -3,7 +3,7 @@ package org.example.GBrains.Models;
 
 import javax.swing.*;
 
-public abstract class DefaultWindow extends JFrame {
+public abstract class DefaultGUI extends JFrame {
     private static final int WIDTH = 450;
     private static final int HEIGHT = 507;
 
@@ -11,7 +11,7 @@ public abstract class DefaultWindow extends JFrame {
 
 
 
-    public DefaultWindow() {
+    public DefaultGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);

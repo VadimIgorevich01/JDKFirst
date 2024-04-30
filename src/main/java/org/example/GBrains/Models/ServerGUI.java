@@ -7,10 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class ServerWindow extends DefaultWindow {
+public class ServerGUI extends DefaultGUI implements ServerView {
 
     JButton btnConnect, btnDisconnect;
     JLabel labelTopInfo = new JLabel();
@@ -19,39 +17,36 @@ public class ServerWindow extends DefaultWindow {
     Server server;
 
 
-    public ServerWindow() {
+    public ServerGUI() {
         super();
         server = new Server(this);
         setTitle("Launch Server");
-        btnConnect = new JButton("Activate");
-        btnDisconnect = new JButton("Disable");
+        addBtn();
         btnConnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                server.setFieldInfoForAllClients("Connected with the server");
+
                 System.out.println("Connected");
                 isServerRun = true;
                 labelTopInfo.setText("Server is online");
                 add(labelTopInfo, BorderLayout.NORTH);
                 panBottom.remove(btnConnect);
                 panBottom.add(btnDisconnect);
-
-                server.setFieldInfoForAllClients("Connected with the server");
-
                 revalidate();
             }
         });
         btnDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                server.setFieldInfoForAllClients("Connection with the server is lost");
+
                 System.out.println("Disconnected");
                 isServerRun = false;
                 labelTopInfo.setText("Server is offline");
                 add(labelTopInfo, BorderLayout.NORTH);
                 panBottom.remove(btnDisconnect);
                 panBottom.add(btnConnect);
-
-                server.setFieldInfoForAllClients("Connection with the server is lost");
-
                 revalidate();
             }
         });
@@ -59,5 +54,11 @@ public class ServerWindow extends DefaultWindow {
         panBottom.add(btnDisconnect);
         add(panBottom, BorderLayout.SOUTH);
         add(labelEntireLogServerWindow, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void addBtn() {
+        btnConnect = new JButton("Activate");
+        btnDisconnect = new JButton("Disable");
     }
 }
