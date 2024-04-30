@@ -1,12 +1,13 @@
 package org.example.GBrains;
 
-import org.example.GBrains.GUI.Client;
-import org.example.GBrains.GUI.Server;
+import org.example.GBrains.Models.ClientWindow;
+import org.example.GBrains.Models.ServerWindow;
 
 public class Main {
     public static void main(String[] args) {
-        Server serverWindow = new Server();
-        Client clientWindow1 = new Client(serverWindow);
-        Client clientWindow2 = new Client(serverWindow);
+        ServerWindow serverWindow = new ServerWindow();
+
+        new ClientWindow(serverWindow);
+        new ClientWindow(serverWindow);
     }
 }

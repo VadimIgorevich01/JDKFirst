@@ -1,4 +1,4 @@
-package org.example.GBrains.GUI;
+package org.example.GBrains.Models;
 
 
 import javax.swing.*;

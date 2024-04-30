@@ -1,4 +1,7 @@
-package org.example.GBrains.GUI;
+package org.example.GBrains.Models;
+
+import org.example.GBrains.Service.Client;
+import org.example.GBrains.Service.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,25 +9,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class Client extends DefaultWindow {
+public class ClientWindow extends DefaultWindow {
+    Client client;
 
     JLabel labelIp, labelPort, labelLogin, labelPassword;
-    JLabel labelFieldInfo = new JLabel();
-    JLabel labelCommunicationLog = new JLabel();
+    public JLabel labelFieldInfo = new JLabel();
+    public JLabel labelCommunicationLog = new JLabel();
     JTextField txtFieldLogin = new JTextField();
     JTextField txtFieldForSending = new JTextField();
     JTextField txtFieldIp, txtFieldPort;
     JPasswordField txtFieldPassword;
     JButton btnLogin = new JButton("Login");
-    String login = "";
-    String strCommunicationLog;
     static int staticCounter = 0;
     private int localCounter = 0;
 
     JPanel panTop = new JPanel(new GridLayout(4,2));
 
-    public Client(Server server) {
+    public ClientWindow(ServerWindow serverWindow) {
         super();
+        client = new Client(serverWindow.server);
+
         setTitle("ClientWindow");
         ++staticCounter;
         localCounter = staticCounter;
@@ -35,14 +39,13 @@ public class Client extends DefaultWindow {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (server.isServerRun) {
-                    connectToServer(server);
-
+                if (serverWindow.isServerRun) {
+                    connectToServerWindowPart(serverWindow);
                 } else {
-                    labelFieldInfo.setText("Connection with the server is lost");
+                    labelFieldInfo.setText("Check connection with the server");
                     add(labelFieldInfo, BorderLayout.NORTH);
                     revalidate();
-                    System.out.println("Connection with the server is lost");
+                    System.out.println("Check connection with the server");
                 }
             }
         });
@@ -68,17 +71,19 @@ public class Client extends DefaultWindow {
         revalidate();
     }
 
-    private void connectToServer(Server server) {
+    private void connectToServerWindowPart(ServerWindow serverWindow) {
         labelFieldInfo.setText("Connected with the server");
         add(labelFieldInfo, BorderLayout.NORTH);
         if (Objects.equals(txtFieldLogin.getText(), "")) {
-            login = "user" + localCounter;
+            client.login = "user" + localCounter;
         } else {
-            login = txtFieldLogin.getText();
+            client.login = txtFieldLogin.getText();
         }
-        //panTop.setVisible(false);
         remove(panTop);
-        server.connectUserToServer(login);
+
+        client.getLoginForServer();
+        client.getClientObjectForServer(this);
+
         remove(btnLogin);
 
         JPanel panDown = new JPanel(new GridLayout(2,1));
@@ -88,40 +93,22 @@ public class Client extends DefaultWindow {
         btnSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (server.isServerRun) {
+                if (serverWindow.isServerRun) {
                     labelFieldInfo.setText("Connected with the server");
+
                     if (Objects.equals(txtFieldForSending.getText(), "")) {
                         System.out.println("Nothing to send");
                     } else {
-                        sendMsgToServer(server);
-                        strCommunicationLog = server.sendCommunicationLogToClient();
-                        labelCommunicationLog.setText(strCommunicationLog);
-
+                        client.getMsgFrClientForServer(txtFieldForSending.getText());
                     }
                 } else {
                     labelFieldInfo.setText("Error, sending failed. Connection with the server is lost");
-                    //add(labelFieldInfo, BorderLayout.NORTH);
                     revalidate();
                     System.out.println("Connection with the server is lost");
                 }
             }
         });
-        strCommunicationLog = server.sendCommunicationLogToClient();
-        labelCommunicationLog.setText(strCommunicationLog);
-        JButton btnUpdate = new JButton("UpdateWindow");
-        btnUpdate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (server.isServerRun) {
-                    labelFieldInfo.setText("Connected with the server");
-                } else {
-                    labelFieldInfo.setText("Error, sending failed. Connection with the server is lost");
-                }
-                strCommunicationLog = server.sendCommunicationLogToClient();
-                labelCommunicationLog.setText(strCommunicationLog);
-            }
-        });
-        add(btnUpdate, BorderLayout.EAST);
+
         panDown.add(txtFieldForSending);
         panDown.add(btnSend);
         add(panDown, BorderLayout.SOUTH);
@@ -129,10 +116,4 @@ public class Client extends DefaultWindow {
         repaint();
         revalidate();
     }
-
-    private void sendMsgToServer(Server server) {
-        String msgForSending = txtFieldForSending.getText();
-        server.receiveMsgFrClient (msgForSending, login);
-    }
-
 }
