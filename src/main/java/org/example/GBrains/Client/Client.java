@@ -1,13 +1,17 @@
-package org.example.GBrains.Service;
+package org.example.GBrains.Client;
 
 import org.example.GBrains.Models.ClientGUI;
+import org.example.GBrains.Models.ClientView;
+import org.example.GBrains.Models.ServerView;
+import org.example.GBrains.Service.Server;
 
 public class Client {
     Server server;
-    public String login = "";
+    public String login;
 
     public Client(Server server) {
         this.server = server;
+        login = "";
     }
 
     public void getLoginForServer() {
@@ -15,7 +19,7 @@ public class Client {
     }
 
 
-    public void getClientObjectForServer(ClientGUI clientGUI) {
+    public void getClientObjectForServer(ClientView clientGUI) {
         server.getClientObject(clientGUI);
     }
 

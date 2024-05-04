@@ -1,6 +1,6 @@
 package org.example.GBrains.Models;
 
-import org.example.GBrains.Service.Client;
+import org.example.GBrains.Client.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,25 +14,34 @@ public class ClientGUI extends DefaultGUI implements ClientView {
     Client client;
 
     JLabel labelIp, labelPort, labelLogin, labelPassword;
-    public JLabel labelFieldInfo = new JLabel();
-    public JLabel labelCommunicationLog = new JLabel();
-    JTextField txtFieldLogin = new JTextField();
-    JTextField txtFieldForSending = new JTextField();
+    public JLabel labelFieldInfo;
+
+    public JLabel labelCommunicationLog;
+    JTextField txtFieldLogin;
+    JTextField txtFieldForSending;
     JTextField txtFieldIp, txtFieldPort;
     JPasswordField txtFieldPassword;
-    JButton btnLogin = new JButton("Login");
+    JButton btnLogin;
     static int staticCounter = 0;
-    private int localCounter = 0;
-    ServerGUI serverWindow;
+    private int localCounter;
+    ServerView serverWindow;
 
-    JPanel panTop = new JPanel(new GridLayout(4,2));
+    JPanel panTop;
 
     public ClientGUI(ServerView serverView) {
         super();
+
+        txtFieldLogin = new JTextField();
+        labelFieldInfo = new JLabel();
+        labelCommunicationLog = new JLabel();
+        txtFieldForSending = new JTextField();
+        btnLogin = new JButton("Login");
+        panTop = new JPanel(new GridLayout(4,2));
+
         if (serverView instanceof ServerGUI) {
             serverWindow = (ServerGUI) serverView;
         }
-        client = new Client(serverWindow.server);
+        client = new Client(serverWindow.getServer());
 
         setTitle("ClientWindow");
         ++staticCounter;
@@ -45,7 +54,7 @@ public class ClientGUI extends DefaultGUI implements ClientView {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (serverWindow.isServerRun) {
+                if (serverWindow.isServerRun()) {
                     connectToServerWindowPart(serverWindow);
                 } else {
                     labelFieldInfo.setText("Check connection with the server");
@@ -77,10 +86,16 @@ public class ClientGUI extends DefaultGUI implements ClientView {
         revalidate();
     }
 
+    public void setLabelFieldInfo(String fieldInfo) {
+        labelFieldInfo.setText(fieldInfo);
+    }
 
+    public void setLabelCommunicationLog(String communicationLog) {
+        labelCommunicationLog.setText(communicationLog);
+    }
 
     @Override
-    public void connectToServerWindowPart(ServerGUI serverWindow) {
+    public void connectToServerWindowPart(ServerView serverWindow) {
         labelFieldInfo.setText("Connected with the server");
         add(labelFieldInfo, BorderLayout.NORTH);
 
@@ -122,7 +137,7 @@ public class ClientGUI extends DefaultGUI implements ClientView {
     }
 
     private void sendMsgToServer() {
-        if (serverWindow.isServerRun) {
+        if (serverWindow.isServerRun()) {
             labelFieldInfo.setText("Connected with the server");
             if (Objects.equals(txtFieldForSending.getText(), "")) {
                 System.out.println("Nothing to send");

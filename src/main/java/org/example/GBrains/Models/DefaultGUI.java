@@ -9,14 +9,16 @@ public abstract class DefaultGUI extends JFrame {
 
     boolean isServerRun = false;
 
-
-
     public DefaultGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
+    }
+
+    public boolean isServerRun() {
+        return isServerRun;
     }
 
 }

@@ -1,7 +1,9 @@
 package org.example.GBrains.Service;
 
 import org.example.GBrains.Models.ClientGUI;
+import org.example.GBrains.Models.ClientView;
 import org.example.GBrains.Models.ServerGUI;
+import org.example.GBrains.Models.ServerView;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,20 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+    List<ClientView> clientGUIList;
+
+    ServerView serverWindow;
+    String strEntireLog;
+    String strCommunicationLog;
+    String strCommunicationLogReady;
+
     public Server(ServerGUI serverWindow) {
         this.serverWindow = serverWindow;
         clientGUIList = new ArrayList<>();
+        strEntireLog = "";
+        strCommunicationLog = "";
     }
-
-    List<ClientGUI> clientGUIList;
-    ServerGUI serverWindow;
-    String strEntireLog = "";
-    String strCommunicationLog = "";
-    String strCommunicationLogReady;
 
     public void setFieldInfoForAllClients(String connectionStatusMsg) {
         for (int i = 0; i < clientGUIList.size(); i++) {
-            clientGUIList.get(i).labelFieldInfo.setText(connectionStatusMsg);
+            clientGUIList.get(i).setLabelFieldInfo(connectionStatusMsg);
         }
     }
     public void connectUserToServer(String userName) {
@@ -33,14 +38,14 @@ public class Server {
         String textBegining = "<html>";
         String textEnding = "</html>";
         String strEntireLogComplete = textBegining + strEntireLog + textEnding;
-        serverWindow.labelEntireLogServerWindow.setText(strEntireLogComplete);
+        serverWindow.setLabelEntireLogServerWindow(strEntireLogComplete);
         serverWindow.revalidate();
     }
 
-    public void getClientObject(ClientGUI client) {
+    public void getClientObject(ClientView client) {
         clientGUIList.add(client);
         for (int i = 0; i < clientGUIList.size(); i++) {
-            clientGUIList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
+            clientGUIList.get(i).setLabelCommunicationLog(strCommunicationLogReady);
         }
     }
 
@@ -52,12 +57,12 @@ public class Server {
         strCommunicationLog += "<br>" + newLine;
         strCommunicationLogReady = textBegining + strCommunicationLog + textEnding;
         for (int i = 0; i < clientGUIList.size(); i++) {
-            clientGUIList.get(i).labelCommunicationLog.setText(strCommunicationLogReady);
+            clientGUIList.get(i).setLabelCommunicationLog(strCommunicationLogReady);
         }
 
         strEntireLog += "<br>" + newLine;
         String strEntireLogReady = textBegining + strEntireLog + textEnding;
-        serverWindow.labelEntireLogServerWindow.setText(strEntireLogReady);
+        serverWindow.setLabelEntireLogServerWindow(strEntireLogReady);
         serverWindow.revalidate();
 
         writeEntireLogToFile(strEntireLogReady);

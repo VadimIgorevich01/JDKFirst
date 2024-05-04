@@ -11,14 +11,20 @@ import java.awt.event.ActionListener;
 public class ServerGUI extends DefaultGUI implements ServerView {
 
     JButton btnConnect, btnDisconnect;
-    JLabel labelTopInfo = new JLabel();
-    public JLabel labelEntireLogServerWindow = new JLabel();
-    JPanel panBottom = new JPanel(new GridLayout(1,2));
+    JLabel labelTopInfo;
+    public JLabel labelEntireLogServerWindow;
+    JPanel panBottom;
     Server server;
 
 
     public ServerGUI() {
         super();
+
+        labelTopInfo = new JLabel();
+        labelEntireLogServerWindow = new JLabel();
+        panBottom = new JPanel(new GridLayout(1,2));
+
+
         server = new Server(this);
         setTitle("Launch Server");
         addBtn();
@@ -60,5 +66,15 @@ public class ServerGUI extends DefaultGUI implements ServerView {
     public void addBtn() {
         btnConnect = new JButton("Activate");
         btnDisconnect = new JButton("Disable");
+    }
+
+    @Override
+    public void setLabelEntireLogServerWindow(String strEntireLogComplete) {
+        labelEntireLogServerWindow.setText(strEntireLogComplete);
+    }
+
+    @Override
+    public Server getServer() {
+        return server;
     }
 }
